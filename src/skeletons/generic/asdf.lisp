@@ -1,14 +1,14 @@
 (defsystem {{name}}
-  :version "0.1"
   :author "{{#email}}{{author}} <{{email}}>{{/email}}{{^email}}{{author}}{{/email}}"
   :maintainer "{{#email}}{{author}} <{{email}}>{{/email}}{{^email}}{{author}}{{/email}}"
   :license "{{license}}"
-  :depends-on ({{deps}})
+  :version "0.1"
+  :depends-on ({{dependencies}})
   :components ((:module "src"
                 :serial t
                 :components
                 ((:file "{{name}}"))))
-  :description "{{desc}}"
+  :description "{{description}}"
   :long-description
   #.(uiop:read-file-string
      (uiop:subpathname *load-pathname* "README.md"))

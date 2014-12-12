@@ -36,7 +36,8 @@
          (make-instance '<option>
                         :name :dependencies
                         :processor (lambda (deps)
-                                     (project-gen.util:parse-systems-list deps))
+                                     (format nil "~{:~A~^~%               ~}"
+                                             (project-gen.util:parse-systems-list deps)))
                         :docstring "The project's dependent systems, as a comma-separated list, e.g: 'local-time, lucerne, crane'."))
    :files
    (list (make-instance '<file>

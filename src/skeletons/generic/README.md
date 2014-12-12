@@ -1,7 +1,9 @@
 # {{name}}
-{{#desc}}
-{{desc}}
-{{/desc}}
+{{#description}}
+
+{{description}}
+
+{{/description}}
 # Overview
 
 # Usage
