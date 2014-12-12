@@ -111,12 +111,18 @@
      str)))
 
 (defmethod render ((template <template>) (options list) (directory pathname))
-  (let ((options (validate-options template options)))
+  (let ((options (validate-options template options))
+        (directory (fad:pathname-as-directory directory)))
     (loop for file in (files template) do
       (let* ((file-path (parse-namestring (render-template (path file) options)))
              (full-file-path (merge-pathnames
                               file-path
-                              (fad:pathname-as-directory directory)))
+                              directory))
              (content (render-template (content file) options)))
-        (print full-file-path)
-        (print content)))))
+        (ensure-directories-exist
+         (fad:pathname-directory-pathname full-file-path))
+        (with-open-file (output-stream full-file-path
+                                       :direction :output
+                                       :if-exists :supersede
+                                       :if-does-not-exist :create)
+          (write-string content output-stream))))))
