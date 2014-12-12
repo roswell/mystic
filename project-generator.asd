@@ -5,7 +5,8 @@
   :depends-on (:cl-mustache
                :trivial-types
                :split-sequence
-               :anaphora)
+               :anaphora
+               :cl-fad)
   :components ((:module "src"
                 :serial t
                 :components

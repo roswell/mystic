@@ -26,7 +26,7 @@
    (content :reader content
             :initarg :content
             :type string
-            :documentation "The file's contents, a mustache template string."))
+            :documentation "The file's contents, a Mustache template string."))
   (:documentation "A file."))
 
 (defclass <option> ()
@@ -102,6 +102,21 @@
                           :option-name (name option))))))
     final-options))
 
+(defun render-template (template-string data)
+  (with-output-to-string (str)
+    (mustache:render
+     template-string
+     (loop for sublist on data by #'cddr collecting
+       (cons (first sublist) (second sublist)))
+     str)))
+
 (defmethod render ((template <template>) (options list) (directory pathname))
-  (let ((final-options (validate-options template options)))
-    (print final-options)))
+  (let ((options (validate-options template options)))
+    (loop for file in (files template) do
+      (let* ((file-path (parse-namestring (render-template (path file) options)))
+             (full-file-path (merge-pathnames
+                              file-path
+                              (fad:pathname-as-directory directory)))
+             (content (render-template (content file) options)))
+        (print full-file-path)
+        (print content)))))
