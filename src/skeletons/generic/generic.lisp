@@ -1,6 +1,8 @@
 (in-package :cl-user)
 (defpackage project-gen.skel.generic
   (:use :cl :project-gen.gen)
+  (:import-from :project-gen.util
+                :read-skeleton)
   (:export :+generic-template+))
 (in-package :project-gen.skel.generic)
 
@@ -32,6 +34,8 @@
                         :docstring "A short, one-line description of the project.")
          (make-instance '<option>
                         :name :dependencies
+                        :processor (lambda (deps)
+                                     (project-gen.util:parse-systems-list deps))
                         :docstring "The project's dependent systems, as a comma-separated list, e.g: 'local-time, lucerne, crane'."))
    :files
    (list (make-instance '<file>

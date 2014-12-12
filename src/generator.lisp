@@ -1,6 +1,6 @@
 (in-package :cl-user)
 (defpackage project-gen.gen
-  (:use :cl :trivial-types)
+  (:use :cl :trivial-types :anaphora)
   (:export :<file>
            :path
            :content
@@ -13,7 +13,9 @@
            :name
            :options
            :files
-           :read-skeleton))
+           :<missing-required-option>
+           :validate-options
+           :render))
 (in-package :project-gen.gen)
 
 (defclass <file> ()
@@ -41,6 +43,11 @@
               :initform nil
               :type boolean
               :documentation "Whether the option is required.")
+   (processor :reader processor
+              :initarg :processor
+              :initform (lambda (x) x)
+              :type function
+              :documentation "A function used to process the value given to the option.")
    (default :reader default
             :initarg :default
             :documentation "The option's default value."))
@@ -65,21 +72,36 @@
           :documentation "A list of files to template."))
   (:documentation "Represents a template."))
 
-(defun read-skeleton (path)
-  (uiop:read-file-string
-   (merge-pathnames
-    path
-    (asdf:system-relative-pathname :project-generator
-                                   #p"src/skeletons/"))))
+(define-condition <missing-required-option> (simple-error)
+  ((option-name :reader option-name
+                :initarg :option-name
+                :type keyword
+                :documentation "The name of the required option."))
+  (:report
+   (lambda (condition stream)
+     (format stream "The option '~A' was required but was not supplied."
+             (option-name condition)))))
 
-(defun strip-whitespace (string)
-  (string-trim '(#\Space #\Tab) string))
+(defmethod validate-options ((template <template>) (options list))
+  "Take a plist of options, and validate it against the options in the template."
+  (let ((final-options (list)))
+    (loop for option in (options template) do
+      (aif (getf options (name option))
+           ;; Was the option supplied? If so, apply the option's processor to it
+           ;; and add it to the `final-options` list
+           (setf (getf final-options (name option))
+                 (funcall (processor option) it))
+           ;; Otherwise, check if it has a default value
+           (if (slot-boundp option 'default)
+               ;; Use this value
+               (setf (getf final-options (name option))
+                     (default option))
+               ;; No default? If the option is required, signal an error
+               (if (requiredp option)
+                   (error '<missing-required-option>
+                          :option-name (name option))))))
+    final-options))
 
-(defun parse-systems-list (systems-list)
-  (loop for system-name
-        in (split-sequence:split-sequence #\, systems-list)
-        collecting
-        (strip-whitespace system-name)))
-
-(defmethod render ((template <template>) (options list) (pathname pathname))
-  )
+(defmethod render ((template <template>) (options list) (directory pathname))
+  (let ((final-options (validate-options template options)))
+    (print final-options)))
