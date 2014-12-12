@@ -4,11 +4,13 @@
   :license "MIT"
   :depends-on (:cl-mustache
                :trivial-types
-               :split-sequence)
+               :split-sequence
+               :anaphora)
   :components ((:module "src"
                 :serial t
                 :components
                 ((:file "generator")
+                 (:file "util")
                  (:module "skeletons"
                   :components
                   ((:module "generic"
