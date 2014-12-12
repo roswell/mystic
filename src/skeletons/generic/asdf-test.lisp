@@ -1,5 +1,5 @@
 (defsystem {{name}}-test
-  :author "{{author}}"
+  :author "{{#email}}{{author}} <{{email}}>{{/email}}{{^email}}{{author}}{{/email}}"
   :license "{{license}}"
   :depends-on (:{{name}}
                :fiveam)

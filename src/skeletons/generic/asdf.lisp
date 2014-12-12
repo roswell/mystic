@@ -1,7 +1,7 @@
 (defsystem {{name}}
-  :version "{{version}}"
-  :author "{{author}} <{{email}}>"
-  :maintainer "{{author}} <{{email}}>"
+  :version "0.1"
+  :author "{{#email}}{{author}} <{{email}}>{{/email}}{{^email}}{{author}}{{/email}}"
+  :maintainer "{{#email}}{{author}} <{{email}}>{{/email}}{{^email}}{{author}}{{/email}}"
   :license "{{license}}"
   :depends-on ({{deps}})
   :components ((:module "src"

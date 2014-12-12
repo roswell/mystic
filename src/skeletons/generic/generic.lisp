@@ -28,6 +28,7 @@
                         :docstring "The project's homepage.")
          (make-instance '<option>
                         :name :license
+                        :requiredp t
                         :docstring "The project's license string, e.g. 'MIT', 'GPLv3'.")
          (make-instance '<option>
                         :name :description
