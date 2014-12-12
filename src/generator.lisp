@@ -113,6 +113,8 @@
 (defmethod render ((template <template>) (options list) (directory pathname))
   (let ((options (validate-options template options))
         (directory (fad:pathname-as-directory directory)))
+    (setf (getf options :year)
+          (write-to-string (local-time:timestamp-year (local-time:now))))
     (loop for file in (files template) do
       (let* ((file-path (parse-namestring (render-template (path file) options)))
              (full-file-path (merge-pathnames
