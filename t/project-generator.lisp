@@ -35,4 +35,34 @@
      (equal (getf options :dependencies) (list "a" "b" "c")))
     (is (equal (length options) 6))))
 
+(test render
+  (let ((dir (asdf:system-relative-pathname :project-generator
+                                            #p"my-project")))
+    (finishes
+      (project-gen.gen:render
+       project-gen.skel.generic:+GENERIC-TEMPLATE+
+       (list :name "my-project" :author "me")
+       dir))
+    (is-true
+     (probe-file (asdf:system-relative-pathname :project-generator
+                                                #p"my-project/my-project.asd")))
+    (is-true
+     (probe-file (asdf:system-relative-pathname :project-generator
+                                                #p"my-project/my-project-test.asd")))
+    (is-true
+     (probe-file (asdf:system-relative-pathname :project-generator
+                                                #p"my-project/README.md")))
+    (is-true
+     (probe-file (asdf:system-relative-pathname :project-generator
+                                                #p"my-project/src/my-project.lisp")))
+    (is-true
+     (probe-file (asdf:system-relative-pathname :project-generator
+                                                #p"my-project/t/my-project.lisp")))
+
+
+
+
+    (finishes
+      (fad:delete-directory-and-files dir))))
+
 (run! 'project-generator)
