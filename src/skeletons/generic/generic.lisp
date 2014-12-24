@@ -54,4 +54,7 @@
                         :content (read-skeleton #p"generic/test.lisp"))
          (make-instance '<file>
                         :path "README.md"
-                        :content (read-skeleton #p"generic/README.md")))))
+                        :content (read-skeleton #p"generic/README.md"))
+         (make-instance '<file>
+                        :path ".gitignore"
+                        :content (read-skeleton #p"generic/gitignore.txt")))))
