@@ -6,7 +6,6 @@
                :trivial-types
                :split-sequence
                :anaphora
-               :cl-fad
                :local-time)
   :components ((:module "src"
                 :serial t
