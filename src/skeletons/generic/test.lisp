@@ -1,6 +1,7 @@
 (in-package :cl-user)
 (defpackage {{name}}-test
-  (:use :cl :fiveam))
+  (:use :cl :fiveam)
+  (:export :run-tests))
 (in-package :{{name}}-test)
 
 (def-suite tests
@@ -13,4 +14,5 @@
   (is-true
    (and t t)))
 
-(run! 'tests)
+(defun run-tests ()
+  (run! 'tests))
