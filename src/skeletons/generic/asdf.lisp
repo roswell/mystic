@@ -3,6 +3,9 @@
   :maintainer "{{#email}}{{author}} <{{email}}>{{/email}}{{^email}}{{author}}{{/email}}"
   :license "{{license}}"
   :version "0.1"
+  :homepage "{{homepage}}"
+  :bug-tracker ""
+  :source-control (:git "")
   :depends-on ({{dependencies}})
   :components ((:module "src"
                 :serial t
