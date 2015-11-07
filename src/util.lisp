@@ -1,10 +1,10 @@
 (in-package :cl-user)
-(defpackage project-gen.util
+(defpackage project-generator.util
   (:use :cl)
   (:export :read-skeleton
            :strip-whitespace
            :parse-systems-list))
-(in-package :project-gen.util)
+(in-package :project-generator.util)
 
 (defun read-skeleton (path)
   (uiop:read-file-string
