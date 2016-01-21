@@ -1,5 +1,7 @@
 # Mystic
 
+[![Build Status](https://travis-ci.org/roswell/mystic.svg?branch=master)](https://travis-ci.org/roswell/mystic)
+
 A modular project skeleton generator.
 
 # Overview
