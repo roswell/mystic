@@ -25,7 +25,8 @@ before_script:
   - ros config
 
 script:
-  - ros -e '(ql:quickload (list :fiveam :cl-coveralls))'
+  - ros -e '(ql:quickload (list :cl-coveralls))'
+        -e '(ql:quickload :{{name}}-test)'
         -e '(setf fiveam:*debug-on-error* t
                   fiveam:*debug-on-failure* t)'
         -e '(setf *debugger-hook*
@@ -33,7 +34,6 @@ script:
                     (declare (ignore h))
                     (print c)
                     (uiop:quit -1)))'
-        -e '(ql:quickload :{{name}}-test)'
         -e '(coveralls:with-coveralls ()
               ({{name}}-test:run-tests))'
 

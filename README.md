@@ -1,6 +1,10 @@
-# project-generator
+# Mystic
 
-A project skeleton generator, part of the Austral project.
+A modular project skeleton generator.
+
+# Overview
+
+# Usage
 
 # License
 
