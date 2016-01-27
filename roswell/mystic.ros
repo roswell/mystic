@@ -1,0 +1,38 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -L sbcl-bin -Q -- $0 "$@"
+|#
+(ql:quickload :mystic :silent t)
+(defparameter *options* '())
+(defparameter *defalut-template* "library")
+
+(let ((path (merge-pathnames ".mystic" (user-homedir-pathname))))
+  (when (probe-file path)
+    (load path)))
+
+(defun cmds (cmds)
+  (loop for cmd in cmds
+     for result = (remove #\Newline (uiop:run-program cmd :output :string :ignore-error-status t))
+     unless (zerop (length result))
+     do (return result)))
+
+(defun main (template &rest argv)
+  (let (name)
+    (if (and argv (not (eql (aref (first argv) 0) #\-)))
+        (setq name (first argv)
+              argv (cdr argv))
+        (setq name template
+              template *defalut-template*))
+    (ql:quickload (format nil "mystic-~A-template" template))
+    (mystic:render
+     (make-instance (read-from-string (format nil "mystic.template.~A:~A-template" template template)))
+     (nconc (list :name name)
+            (loop for (a b) on argv by #'cddr
+               collect (read-from-string (format nil ":~A" (string-left-trim "-:" a)))
+               collect b)
+            *options*
+            ;; the idea comes from eazy-project
+            (list :author (cmds '("git config --global --get user.name" "whoami"))
+                  :email (cmds '("git config --global --get user.email" "echo $(whoami)@$(hostname)"))))
+     (make-pathname :defaults *load-pathname* :name nil :type nil))))
