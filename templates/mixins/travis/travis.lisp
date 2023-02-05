@@ -1,13 +1,12 @@
-(in-package :cl-user)
-(defpackage mystic.template.travis
-  (:use :cl)
-  (:import-from :mystic.util
-                :read-template-file
-                :render-string
-                :write-file)
-  (:export :travis-mixin)
+(uiop:define-package #:mystic.template.travis
+  (:use #:cl)
+  (:import-from #:mystic.util
+                #:read-template-file
+                #:render-string
+                #:write-file)
+  (:export #:travis-mixin)
   (:documentation "A Mystic mixin to add a .travis.yml file to a project."))
-(in-package :mystic.template.travis)
+(in-package #:mystic.template.travis)
 
 ;;; Classes
 

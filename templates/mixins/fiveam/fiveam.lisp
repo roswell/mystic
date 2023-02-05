@@ -1,13 +1,12 @@
-(in-package :cl-user)
-(defpackage mystic.template.fiveam
-  (:use :cl)
-  (:import-from :mystic.util
-                :read-template-file
-                :render-string
-                :write-file)
-  (:export :fiveam-mixin)
+(uiop:define-package #:mystic.template.fiveam
+  (:use #:cl)
+  (:import-from #:mystic.util
+                #:read-template-file
+                #:render-string
+                #:write-file)
+  (:export #:fiveam-mixin)
   (:documentation "A Mystic mixin to add a FiveAM test system and test suite."))
-(in-package :mystic.template.fiveam)
+(in-package #:mystic.template.fiveam)
 
 ;;; Classes
 

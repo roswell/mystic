@@ -1,4 +1,3 @@
-(in-package :cl-user)
-(defpackage {{name}}
-  (:use :cl))
-(in-package :{{name}})
+(uiop:define-package #:{{name}}
+  (:use #:cl))
+(in-package #:{{name}})

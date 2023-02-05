@@ -9,6 +9,8 @@
   :depends-on (:cl-mustache
                :split-sequence
                :anaphora
+               :alexandria
+               :ubiquitous
                :local-time)
   :components ((:module "src"
                 :serial t

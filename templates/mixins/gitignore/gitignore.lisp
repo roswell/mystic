@@ -1,13 +1,12 @@
-(in-package :cl-user)
-(defpackage mystic.template.gitignore
-  (:use :cl)
-  (:import-from :mystic.util
-                :read-template-file
-                :render-string
-                :write-file)
-  (:export :gitignore-mixin)
+(uiop:define-package #:mystic.template.gitignore
+  (:use #:cl)
+  (:import-from #:mystic.util
+                #:read-template-file
+                #:render-string
+                #:write-file)
+  (:export #:gitignore-mixin)
   (:documentation "A Mystic mixin to add a .gitignore file to a project."))
-(in-package :mystic.template.gitignore)
+(in-package #:mystic.template.gitignore)
 
 ;;; Classes
 
