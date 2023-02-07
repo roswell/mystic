@@ -17,7 +17,12 @@
            #:template-name
            #:template-docstring
            #:template-options)
-  (:export #:missing-required-option)
+  (:export #:missing-required-option
+           #:bad-option-value
+           #:ask-about-option-without-default
+           #:ask-about-value-from-config
+           #:ask-about-defaults
+           #:base-option-condition)
   (:export #:validate-options
            #:render-template
            #:render
@@ -154,19 +159,36 @@
   (:documentation "Signalled when user passed REQUEST-ALL-OPTIONS-P argument to RENDER method, didn't supply an option value and we don't have a default or saved value for it."))
 
 
-(define-condition missing-required-option (simple-error)
-  ((option-name :reader option-name
-                :initarg :option-name
-                :type keyword
-                :documentation "The name of the required option."))
+(define-condition missing-required-option (base-option-condition)
+  ()
   (:report
    (lambda (condition stream)
      (format stream "The option '~A' is required but was not supplied.~@
                      ~@
-                     This option should be ~S~@"
+                     This option should be ~S."
              (option-name condition)
              (option-docstring condition))))
   (:documentation "Signalled when a required option is not supplied."))
+
+
+(define-condition bad-option-value (base-option-condition)
+  ((value :reader option-value
+          :initarg :value
+          :initform (error "Argument :value is required.")
+          :documentation "Wrong value of an option.")
+   (problem :reader option-value-problem
+            :initarg :problem
+            :initform (error "Argument :problem is required.")
+            :documentation "What is wrong with value."))
+  (:report
+   (lambda (condition stream)
+     (format stream "Invalid value ~S was given for option '~A'.~@
+                     ~@
+                     ~A"
+             (option-value condition)
+             (option-name condition)
+             (option-value-problem condition))))
+  (:documentation "Signalled when a some value is in wrong format or type."))
 
 ;;; Methods
 
@@ -179,6 +201,15 @@
 (defun config-pathname ()
   (ubiquitous:designator-pathname ubiquitous:*storage-pathname*
                                   ubiquitous:*storage-type*))
+
+
+(defgeneric validate-options (template options &key request-all-options-p)
+  (:documentation "Validates templates and returns a plist where keys are option names. This plist will be used to render templates."
+
+                  "A template or mixin might define a method for this generic function either to
+                   apply some additional validation or to add calculated variables to the plist. For example,
+                   if some option contains a system name, you might want to uppercase it or to replace
+                   dashes with underscores and store results to a separate variable."))
 
 
 (defmethod validate-options ((template template) (options list) &key request-all-options-p)
