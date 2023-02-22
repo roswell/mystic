@@ -204,9 +204,9 @@
 
 
 (defgeneric validate-options (template options &key request-all-options-p)
-  (:documentation "Validates templates and returns a plist where keys are option names. This plist will be used to render templates."
+  (:documentation "Validates templates and returns a plist where keys are option names. This plist will be used to render templates.
 
-                  "A template or mixin might define a method for this generic function either to
+                   A template or mixin might define a method for this generic function either to
                    apply some additional validation or to add calculated variables to the plist. For example,
                    if some option contains a system name, you might want to uppercase it or to replace
                    dashes with underscores and store results to a separate variable."))
