@@ -1,8 +1,7 @@
-(in-package :cl-user)
-(defpackage {{name}}-test
-  (:use :cl :fiveam)
-  (:export :run-tests))
-(in-package :{{name}}-test)
+(uiop:define-package #:{{name}}-test
+  (:use #:cl #:fiveam)
+  (:export #:run-tests))
+(in-package #:{{name}}-test)
 
 (def-suite tests
   :description "{{name}} tests.")

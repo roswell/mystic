@@ -1,13 +1,12 @@
-(in-package :cl-user)
-(defpackage mystic.template.readme
-  (:use :cl)
-  (:import-from :mystic.util
-                :read-template-file
-                :render-string
-                :write-file)
-  (:export :readme-mixin)
+(uiop:define-package #:mystic.template.readme
+  (:use #:cl)
+  (:import-from #:mystic.util
+                #:read-template-file
+                #:render-string
+                #:write-file)
+  (:export #:readme-mixin)
   (:documentation "A Mystic mixin to add a README.md file."))
-(in-package :mystic.template.readme)
+(in-package #:mystic.template.readme)
 
 ;;; Classes
 

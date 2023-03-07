@@ -1,16 +1,17 @@
-(in-package :cl-user)
-(defpackage mystic.template.file
-  (:use :cl)
-  (:import-from :mystic.util
-                :render-string
-                :write-file)
-  (:export :file
-           :file-path
-           :file-content
-           :file-mixin)
-  (:documentation "A Mystic template mixin for rendering a list of files using
- Mustache."))
-(in-package :mystic.template.file)
+(uiop:define-package #:mystic.template.file
+  (:use #:cl)
+  (:import-from #:mystic.util
+                #:render-string
+                #:write-file)
+  (:import-from #:mystic.util
+                #:read-template-file)
+  (:export #:file
+           #:file-path
+           #:file-content
+           #:file-mixin
+           #:make-file)
+  (:documentation "A Mystic template mixin for rendering a list of files using Mustache."))
+(in-package #:mystic.template.file)
 
 ;;; Classes
 
@@ -44,3 +45,8 @@ a Mustache template string.")
                                             directory))
            (content (mystic.util:render-string (file-content file) options)))
       (write-file content full-file-path))))
+
+(defun make-file (system-name path output-path-template)
+  (make-instance 'file
+                 :path output-path-template
+                 :content (read-template-file path :asdf-system system-name)))

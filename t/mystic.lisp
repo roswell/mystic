@@ -1,10 +1,9 @@
-(in-package :cl-user)
-(defpackage mystic-test
-  (:use :cl :fiveam)
-  (:import-from :mystic
-                :validate-options)
-  (:export :run-tests))
-(in-package :mystic-test)
+(uiop:define-package #:mystic-test
+  (:use #:cl #:fiveam)
+  (:import-from #:mystic
+                #:validate-options)
+  (:export #:run-tests))
+(in-package #:mystic-test)
 
 (def-suite mystic
   :description "Mystic tests")
@@ -59,8 +58,8 @@
           (has str #p"my-project.asd"))
         (has "defsystem my-project-test" #p"my-project-test.asd")
         (has "# my-project" #p"README.md")
-        (has "defpackage my-project" #p"src/my-project.lisp")
-        (has "defpackage my-project-test" #p"t/my-project.lisp")))
+        (has "define-package #:my-project" #p"src/my-project.lisp")
+        (has "define-package #:my-project-test" #p"t/my-project.lisp")))
     (uiop:delete-directory-tree true-dir :validate t)))
 
 (defun run-tests ()

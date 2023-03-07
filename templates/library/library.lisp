@@ -1,16 +1,15 @@
-(in-package :cl-user)
-(defpackage mystic.template.library
-  (:use :cl)
-  (:import-from :mystic.util
-                :read-template-file
-                :parse-systems-list)
-  (:import-from :mystic
-                :prompt-option)
-  (:import-from :mystic.template.file
-                :file)
-  (:export :library-template)
+(uiop:define-package #:mystic.template.library
+  (:use #:cl)
+  (:import-from #:mystic.util
+                #:read-template-file
+                #:parse-comma-separated-list)
+  (:import-from #:mystic
+                #:make-option)
+  (:import-from #:mystic.template.file
+                #:make-file)
+  (:export #:library-template)
   (:documentation "A Mystic mixin to add a .travis.yml file."))
-(in-package :mystic.template.library)
+(in-package #:mystic.template.library)
 
 ;;; Classes
 
@@ -24,48 +23,41 @@
    :name "Library"
    :docstring "An empty Common Lisp library."
    :options
-   (list (make-instance 'prompt-option
-                        :name :name
-                        :title "Name"
-                        :requiredp t
-                        :docstring "The project's name.")
-         (make-instance 'prompt-option
-                        :name :author
-                        :title "Author"
-                        :requiredp t
-                        :docstring "The project author's name.")
-         (make-instance 'prompt-option
-                        :name :email
-                        :title "Email"
-                        :docstring "The project author's email.")
-         (make-instance 'prompt-option
-                        :name :homepage
-                        :title "Homepage"
-                        :docstring "The project's homepage.")
-         (make-instance 'prompt-option
-                        :name :license
-                        :title "License"
-                        :requiredp t
-                        :docstring "The project's license string, e.g. 'MIT', 'GPLv3'.")
-         (make-instance 'prompt-option
-                        :name :description
-                        :title "Description"
-                        :docstring "A short, one-line description of the project.")
-         (make-instance 'prompt-option
-                        :name :dependencies
-                        :title "Dependencies"
-                        :processor (lambda (deps)
-                                     (format nil "~{:~A~^~%               ~}"
-                                             (parse-systems-list deps)))
-                        :docstring "The project's dependent systems, as a comma-separated list, e.g: 'local-time, lucerne, crane'."))
+   (list (make-option :name
+                      "Name"
+                      "The project's name."
+                      :requiredp t)
+         (make-option :author
+                      "Author"
+                      "The project author's name."
+                      :requiredp t)
+         (make-option :email
+                      "Email"
+                      "The project author's email.")
+         (make-option :homepage
+                      "Homepage"
+                      "The project's homepage.")
+         (make-option :license
+                      "License"
+                      "The project's license string, e.g. 'MIT', 'GPLv3'."
+                      :requiredp t)
+         (make-option :description
+                      "Description"
+                      "A short, one-line description of the project.")
+         (make-option :dependencies
+                      "Dependencies"
+                      "The project's dependent systems, as a comma-separated list, e.g: 'local-time, lucerne, crane'."
+                      :processor (lambda (deps)
+                                   (format nil "~{:~A~^~%               ~}"
+                                           (parse-comma-separated-list deps)))))
    :files
    (list
-    (make-instance 'file
-                   :path "{{name}}.asd"
-                   :content (read-template-file #p"library/asdf.lisp"))
-    (make-instance 'file
-                   :path "src/{{name}}.lisp"
-                   :content (read-template-file #p"library/source.lisp"))))
-  (:documentation "A Mystic mixin to add a .travis.yml file."))
+    (make-file :mystic
+               "library/asdf.lisp"
+               "{{name}}.asd")
+    (make-file :mystic
+               "library/source.lisp"
+               "src/{{name}}.lisp")))
+  (:documentation "A Mystic class to create empty Common Lisp library."))
 
 (mystic:register-template (make-instance 'library-template))
